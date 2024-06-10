@@ -1,2 +1,9 @@
-package com.ne.template.controllers;public class ProductController {
+package com.ne.template.controllers;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping
+public class ProductController {
 }
