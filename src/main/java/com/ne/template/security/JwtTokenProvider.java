@@ -1,6 +1,8 @@
 package com.ne.template.security;
 
 import com.ne.template.exceptions.JWTVerificationException;
+import com.ne.template.models.User;
+import com.ne.template.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -34,13 +36,14 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
-        System.out.println(userPrincipal.getId());
+
+        User authUser = Mapper.getUserFromDTO(userPrincipal);
         try {
             String jwt = Jwts.builder()
                     .setId(userPrincipal.getId() + "")
                     .setSubject(userPrincipal.getId() + "")
-                    .claim(CLAIM_KEY_USER, userPrincipal)
-                    .claim(CLAIM_KEY_ROLES, roles) // Include roles in the claim
+                    .claim(CLAIM_KEY_USER, authUser.getEmail())
+                    .claim(CLAIM_KEY_ROLES, authUser.getRole()) // Include roles in the claim
                     .setIssuedAt(new Date(System.currentTimeMillis()))
                     .setExpiration(expiryDate)
                     .signWith(SignatureAlgorithm.HS512, jwtSecret)

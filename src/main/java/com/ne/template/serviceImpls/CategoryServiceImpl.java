@@ -1,6 +1,7 @@
 package com.ne.template.serviceImpls;
 
 import com.ne.template.dtos.requests.CreateCategoryDto;
+import com.ne.template.dtos.requests.UpdateCategoryDto;
 import com.ne.template.exceptions.NotFoundException;
 import com.ne.template.models.Category;
 import com.ne.template.repositories.ICategoryRepository;
@@ -14,12 +15,11 @@ import java.util.UUID;
 @Service
 public class CategoryServiceImpl implements ICategoryService {
     private final ICategoryRepository categoryRepository;
-    private final ICategoryService categoryService;
 
     @Autowired
-    public CategoryServiceImpl(ICategoryRepository categoryRepository, ICategoryService categoryService) {
+    public CategoryServiceImpl(ICategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.categoryService = categoryService;
+
     }
 
     @Override
@@ -30,21 +30,45 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public List<Category> findAll() {
-        return List.of();
+        return categoryRepository.findAll();
     }
 
     @Override
-    public Category createCategory(CreateCategoryDto category) {
-        return null;
+    public Category createCategory(CreateCategoryDto dto) {
+        Category newCategory = new Category();
+        newCategory.setName(dto.getName());
+        newCategory.setDescription(dto.getDescription());
+        return categoryRepository.save(newCategory);
     }
 
     @Override
-    public Category updateCategory(CreateCategoryDto category) {
-        return null;
+    public Category findCategoryById(UUID id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Category with id %s is not found", id)));
+    }
+
+    @Override
+    public Category updateCategory(UpdateCategoryDto dto, UUID categoryId) {
+        boolean isCategoryExists = categoryRepository.existsById(categoryId);
+
+        if (!isCategoryExists) {
+            throw new NotFoundException(String.format("Category with id %s is not found", categoryId));
+        }
+        Category categoryToUpdate = categoryRepository.findById(categoryId).get();
+        categoryToUpdate.setDescription(dto.getDescription());
+        categoryToUpdate.setName(dto.getName());
+        return categoryRepository.save(categoryToUpdate);
+
+
     }
 
     @Override
     public void deleteCategory(UUID id) {
+        boolean isCategoryExists = categoryRepository.existsById(id);
+        if (!isCategoryExists) {
+            throw new NotFoundException(String.format("Category with id %s is not found", id));
+        }
+        categoryRepository.deleteById(id);
+
 
     }
 

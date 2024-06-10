@@ -5,6 +5,7 @@ import com.ne.template.security.CustomUserDetailsService;
 import com.ne.template.security.JwtAuthenticationEntryPoint;
 import com.ne.template.security.JwtAuthenticationFilterChain;
 import com.ne.template.utils.ApResponse;
+import com.ne.template.utils.ApiResponse;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +39,9 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
-    @Autowired
+    private final JwtAuthenticationEntryPoint unauthorizedHandler;
     private final CustomUserDetailsService userService;
-
+    private final JwtAuthenticationEntryPoint authEntryPoint;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -59,14 +58,19 @@ public class SecurityConfig {
             "/api/users/is-code-valid",
             "/api/documents/download/**",
     };
+
     @Bean
     public AuthenticationEntryPoint authenticationErrorHandler() {
         return (request, response, ex) -> {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             ServletOutputStream out = response.getOutputStream();
-            new ObjectMapper().writeValue(out, new ApResponse<String>("Invalid or missing auth token." +
-                    "", (Object) "", HttpStatus.UNAUTHORIZED));
+//            new ObjectMapper().writeValue(out, new ApResponse<String>("Invalid or missing auth token." +
+//                    "", (Object) "", HttpStatus.UNAUTHORIZED));
+            ObjectMapper objectMapper = new ObjectMapper();
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getOutputStream().println(objectMapper.writeValueAsString(new ApiResponse(false, "Error Auth", null)));
             out.flush();
         };
     }
@@ -93,6 +97,7 @@ public class SecurityConfig {
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint));
         return http.build();
     }
 

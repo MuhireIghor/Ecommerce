@@ -66,7 +66,7 @@ public class AuthenticationController {
         return ResponseEntity.ok().body(new ApiResponse(
                 true,
                 "Successfully Logged in",
-                new JWTAuthenticationResponse(jwt, user)
+                new JWTAuthenticationResponse(jwt)
         ));
 
 
