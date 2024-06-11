@@ -13,6 +13,5 @@ import java.util.Date;
 @AllArgsConstructor
 public class CreateOrderDto {
     private Date orderDate ;
-    private Double totalAmount;
     private EOrderStatus status;
 }

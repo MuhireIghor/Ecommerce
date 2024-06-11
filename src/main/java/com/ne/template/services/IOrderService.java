@@ -3,6 +3,7 @@ package com.ne.template.services;
 import com.ne.template.dtos.requests.CreateOrderDto;
 import com.ne.template.dtos.requests.UpdateOrderDto;
 import com.ne.template.models.Order;
+import com.ne.template.models.User;
 
 import java.util.List;
 import java.util.UUID;

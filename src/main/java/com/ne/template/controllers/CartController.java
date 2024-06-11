@@ -55,7 +55,20 @@ public class CartController {
 
 
     @GetMapping("/by-logged-in-user")
-    public Cart getCart() {
-        return cartService.getCartByLoggedInUser();
+
+    public ResponseEntity<ApiResponse> getCart() {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            true,
+                            "Cart retrieved successfully",
+                            cartService.getCartByLoggedInUser()
+                    )
+            );
+
+
+        } catch (Exception e) {
+            return ExceptionUtils.handleControllerExceptions(e);
+        }
     }
 }

@@ -90,13 +90,14 @@ public class CartServiceImpl implements ICartService {
                 cartItem.setProduct(productToAdd);
                 cartItem.setQuantity(quantity);
                 cart.getCartItems().add(cartItem);
+
                 cartItemRepository.save(cartItem);
             }
 
             return cartRepository.save(cart);
 
         } catch (Exception e) {
-            throw new BadRequestAlertException("Invalid user logged in");
+            throw new BadRequestAlertException(e.getMessage());
 
         }
 

@@ -18,7 +18,7 @@ public class CartItem {
     @Id
     @GeneratedValue
     private UUID ID;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
 
     private Product product;

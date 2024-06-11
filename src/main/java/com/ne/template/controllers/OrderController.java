@@ -120,5 +120,21 @@ public class OrderController {
 
     }
 
+    @PostMapping("/place-order")
+    public ResponseEntity<ApiResponse> placeOrder(CreateOrderDto dto) {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            true,
+                            "Order placed successfully ",
+                            orderService.createOrder(dto)
+                    )
+            );
+
+        } catch (Exception e) {
+            return ExceptionUtils.handleControllerExceptions(e);
+        }
+    }
+
 
 }
