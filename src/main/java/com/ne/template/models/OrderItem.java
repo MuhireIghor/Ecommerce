@@ -1,5 +1,6 @@
 package com.ne.template.models;
 
+import com.ne.template.audits.TimestampAudit;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItem {
+public class OrderItem extends TimestampAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

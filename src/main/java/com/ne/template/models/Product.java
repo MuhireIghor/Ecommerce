@@ -17,6 +17,7 @@ import java.util.UUID;
 @Table
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "product_id")
     private UUID id;
     @Column(name = "product_name")
@@ -33,11 +34,12 @@ public class Product {
     @JoinColumn(name = "order_item_id")
     private Set<OrderItem> orderItems = new HashSet<>();
 
-    public Product(String productName, String productDescription,Double price,Integer stockQuantity) {
+    public Product(String productName, String productDescription,Double price,Integer stockQuantity,Category category) {
         this.productName = productName;
         this.productDescription = productDescription;
         this.price = price;
         this.stockQuantity = stockQuantity;
+        this.category = category;
     }
 
 

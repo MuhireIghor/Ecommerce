@@ -2,6 +2,7 @@ package com.ne.template.services;
 
 import com.ne.template.dtos.requests.CreateProductDto;
 import com.ne.template.dtos.requests.UpdateProductDto;
+import com.ne.template.exceptions.ResourceNotFoundException;
 import com.ne.template.models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,14 +15,16 @@ public interface IProductService {
 
     List<Product> getAllProducts();
 
-    List<Product> getProductsByCategory(String categoryName);
+    List<Product> getProductsByCategory(String categoryName) throws ResourceNotFoundException;
 
     Product registerProduct(CreateProductDto dto);
 
     Product updateProduct(UpdateProductDto dto,UUID prodId);
 
     void deleteProduct(UUID id);
+    Product getProductByName(String name);
     Page<Product> getAllPaginatedProducts(Pageable pageable);
+
 
 
 }

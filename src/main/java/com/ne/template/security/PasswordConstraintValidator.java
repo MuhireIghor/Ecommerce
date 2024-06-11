@@ -29,4 +29,9 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
                 .addConstraintViolation();
         return false;
     }
+
+    @Override
+    public void initialize(ValidPassword constraintAnnotation) {
+        ConstraintValidator.super.initialize(constraintAnnotation);
+    }
 }

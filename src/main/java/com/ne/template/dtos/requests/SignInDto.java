@@ -1,5 +1,6 @@
 package com.ne.template.dtos.requests;
 
+import com.ne.template.security.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -17,5 +18,6 @@ public class SignInDto {
     @Email(message = "Email must be a valid email")
     private String email;
     @NotBlank(message = "Password is required")
+    @ValidPassword
     private String password;
 }

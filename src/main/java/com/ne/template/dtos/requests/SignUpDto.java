@@ -23,7 +23,7 @@ public class SignUpDto {
     private String lastName;
     @Email
     private String email;
-    @ValidPassword
+    @ValidPassword(message = "Password validations are not well done")
     private String password;
     private ERole role;
     private Date dob;

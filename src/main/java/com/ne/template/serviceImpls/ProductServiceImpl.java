@@ -4,11 +4,13 @@ import com.ne.template.dtos.requests.CreateProductDto;
 import com.ne.template.dtos.requests.UpdateProductDto;
 import com.ne.template.exceptions.BadRequestAlertException;
 import com.ne.template.exceptions.NotFoundException;
+import com.ne.template.exceptions.ResourceNotFoundException;
 import com.ne.template.models.Category;
 import com.ne.template.models.Product;
 import com.ne.template.repositories.IProductRepository;
 import com.ne.template.services.ICategoryService;
 import com.ne.template.services.IProductService;
+import com.ne.template.utils.ExceptionUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,13 +43,14 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public List<Product> getProductsByCategory(String categoryName) {
+    public List<Product> getProductsByCategory(String categoryName) throws ResourceNotFoundException {
         try {
             Category category = categoryService.findByCategoryName(categoryName);
             return productRepository.findAllByCategory(category);
 
         } catch (Exception e) {
-            throw new BadRequestAlertException(String.format("Error occured in finding products with category %s", categoryName));
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
         }
     }
 
@@ -85,6 +88,12 @@ public class ProductServiceImpl implements IProductService {
             throw new NotFoundException(String.format("Product with id %s is not found", id));
         }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public Product getProductByName(String name) {
+        return productRepository.findByProductName(name).orElseThrow(() -> new NotFoundException(String.format("Product with name %s is not found", name)));
+
     }
 
     @Override

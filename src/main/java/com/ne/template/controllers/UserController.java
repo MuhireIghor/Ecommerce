@@ -85,7 +85,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/registerUser/Admin")
-    public ResponseEntity<ApiResponse> createUserAsAdmin(@RequestBody @Valid SignUpDto dto) {
+    public ResponseEntity<ApiResponse> createUserAsAdmin(@Valid @RequestBody SignUpDto dto) {
         try {
 
             User createdUser = new User();
@@ -103,7 +103,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/registerUser/Customer")
-    public ResponseEntity<ApiResponse> createUserAsCustomer(@RequestBody @Valid SignUpDto dto) {
+    public ResponseEntity<ApiResponse> createUserAsCustomer(@Valid @RequestBody SignUpDto dto) {
         try{
 
         if (dto.getRole().equals(ERole.ADMIN)) {

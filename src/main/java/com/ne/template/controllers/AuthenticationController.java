@@ -60,14 +60,14 @@ public class AuthenticationController {
             jwt = jwtTokenProvider.generateToken(authentication);
             userPrincipal = UserUtils.getLoggedInUser();
             user = userService.getUserById(userPrincipal.getId());
+            return ResponseEntity.ok().body(new ApiResponse(
+                    true,
+                    "Successfully Logged in",
+                    new JWTAuthenticationResponse(jwt)
+            ));
         } catch (Exception e) {
-      return ExceptionUtils.handleControllerExceptions(e);
+            return ExceptionUtils.handleControllerExceptions(e);
         }
-        return ResponseEntity.ok().body(new ApiResponse(
-                true,
-                "Successfully Logged in",
-                new JWTAuthenticationResponse(jwt)
-        ));
 
 
     }
